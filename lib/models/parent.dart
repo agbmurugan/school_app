@@ -20,6 +20,7 @@ class Parent extends Bio {
     String? secondaryPhone,
     String? imageUrl,
     String? docId,
+    bool? isActive,
   }) : super(
           docId: docId,
           name: name,
@@ -37,6 +38,7 @@ class Parent extends Bio {
           secondaryPhone: secondaryPhone,
           imageUrl: imageUrl,
           gender: gender,
+          isActive:isActive,
         );
 
   List<String> children;
@@ -63,6 +65,7 @@ class Parent extends Bio {
     lastName = parent.lastName;
     primaryPhone = parent.primaryPhone;
     secondaryPhone = parent.secondaryPhone;
+    isActive = parent.isActive;
   }
 
   factory Parent.fromJson(Map<String, dynamic> json) => Parent(
@@ -83,6 +86,7 @@ class Parent extends Bio {
         state: json["state"],
         city: json["city"],
         children: List<String>.from((json["children"]).map((x) => x)),
+        isActive: json["isActive"] ?? false,
       );
 
   Map<String, dynamic> toJson() {
@@ -90,6 +94,7 @@ class Parent extends Bio {
       "children": children,
       "uid": uid,
       "docId" : docId,
+      "isActive": isActive ?? false,
     };
     map.addAll(super.toBioJson());
     return map;

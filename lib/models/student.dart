@@ -25,6 +25,7 @@ class Student extends Bio {
       String? primaryPhone,
       String? secondaryPhone,
       String? state,
+      bool?isActive,
       String? docId})
       : super(
           docId: docId,
@@ -42,6 +43,7 @@ class Student extends Bio {
           lastName: lastName,
           primaryPhone: primaryPhone,
           secondaryPhone: secondaryPhone,
+          isActive: isActive,
           state: state,
         );
 

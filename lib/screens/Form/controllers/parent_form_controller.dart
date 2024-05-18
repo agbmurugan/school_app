@@ -36,6 +36,7 @@ class ParentFormController with BioFormController {
           gender: gender,
           lastName: lastName.text,
           state: state,
+          isActive: isActive,
           //------------------------
           children: children.map((e) => e.text).toList(),
           uid: uid,
@@ -57,6 +58,7 @@ class ParentFormController with BioFormController {
     children = parent.children.map((e) => TextEditingController(text: e)).toList();
     uid = parent.uid;
     docId = parent.docId;
+    isActive = parent.isActive;
   }
 
   factory ParentFormController.fromParent(Parent parent) {
@@ -75,6 +77,7 @@ class ParentFormController with BioFormController {
     controller.children = parent.children.map((e) => TextEditingController(text: e)).toList();
     controller.uid = parent.uid;
     controller.docId = parent.docId;
+    controller.isActive = parent.isActive;
     return controller;
   }
 }

@@ -52,6 +52,7 @@ class ParentController extends GetxController implements CRUD {
   Future<Result> add() async {
     var docId = firestore.collection('parents').doc(parent.icNumber).id;
     parent.docId = docId;
+    parent.isActive = true;
     return firestore
         .collection('parents')
         .doc(parent.docId)
@@ -89,41 +90,64 @@ class ParentController extends GetxController implements CRUD {
         .onError((error, stackTrace) => Result.error(error.toString()));
   }
 
-  @override
-Future<Result> delete() async {
-  try {
-    // Delete admin data if it exists
-    var adminSnapshot = await firestore.collection('admins').doc(parent.icNumber).get();
-    if (adminSnapshot.exists) {
-      await firestore.collection('admins').doc(parent.icNumber).delete();
-    }
+  // @override
+// Future<Result> delete() async {
+//   try {
+//     // Delete admin data if it exists
+//     var adminSnapshot = await firestore.collection('admins').doc(parent.icNumber).get();
+//     if (adminSnapshot.exists) {
+//       await firestore.collection('admins').doc(parent.icNumber).delete();
+//     }
 
-    // Get the email ID of the parent
-    var parentSnapshot = await firestore.collection('parents').doc(parent.icNumber).get();
-    var email = parentSnapshot.data()?['email']; // Replace 'email' with the actual field name
-    var password = parentSnapshot.data()?['password'];
+//     // Get the email ID of the parent
+//     var parentSnapshot = await firestore.collection('parents').doc(parent.icNumber).get();
+//     var email = parentSnapshot.data()?['email']; // Replace 'email' with the actual field name
+//     var password = parentSnapshot.data()?['password'];
+//     var isActive = parentSnapshot.data()?['isActive'];
 
-    // Delete the associated user account
+//     // Delete the associated user account
     
 
-    // Delete the parent data from Firestore
-    var fireList = firestore
-        .collection('parents')
-        .doc(parent.icNumber)
-        .delete()
-        .then((value) => Result.success("Parent Updated successfully"))
-        .onError((error, stackTrace) => Result.error(error.toString()));
-        print("$fireList list of parent");
-if (email != null) {
-      await deleteAccount(email,password);
+//     // Delete the parent data from Firestore
+//     var fireList = firestore
+//         .collection('parents')
+//         .doc(parent.icNumber)
+//         .delete()
+//         .then((value) => Result.success("Parent Updated successfully"))
+//         .onError((error, stackTrace) => Result.error(error.toString()));
+//         print("$fireList list of parent");
+// if (email != null) {
+//       await deleteAccount(email,password);
+//     }
+//     // Return success message
+//     return fireList;
+//   } catch (error) {
+//     // Return error message
+//     return Result.error(error.toString());
+//   }
+// }
+@override
+Future<Result> delete() async {
+  try {
+    // Fetch the document of the parent you want to deactivate
+    var parentSnapshot = await firestore.collection('parents').doc(parent.icNumber).get();
+
+    // Check if the document exists
+    if (parentSnapshot.exists) {
+      // Update the isActive field to false instead of deleting the parent
+      await firestore.collection('parents').doc(parent.icNumber).update({
+        'isActive': false
+      });
+      return Result.success("Parent deactivated successfully");
+    } else {
+      return Result.error("Parent not found");
     }
-    // Return success message
-    return fireList;
   } catch (error) {
-    // Return error message
-    return Result.error(error.toString());
+    // Return error message if something goes wrong
+    return Result.error("Failed to deactivate parent: ${error.toString()}");
   }
 }
+
 
   Stream<Parent> get stream => firestore.collection('parents').doc(parent.icNumber).snapshots().map((event) => Parent.fromJson(event.data()!));
 }

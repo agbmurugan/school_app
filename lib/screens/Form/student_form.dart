@@ -46,7 +46,9 @@ class _StudentFormState extends State<StudentForm> {
 
   validateIcNumber() async {
     duplicateIcNumber = false;
-    var tempStudents = await students.where('icNumber', isEqualTo: controller.icNumber.text).get();
+    var tempStudents = await students
+        .where('icNumber', isEqualTo: controller.icNumber.text)
+        .get();
     if (formMode == FormMode.update) {
       if (tempStudents.docs.length > 1) {
         duplicateIcNumber = true;
@@ -80,18 +82,23 @@ class _StudentFormState extends State<StudentForm> {
     fatherFormController.gender = Gender.male;
     motherFormController.gender = Gender.female;
     guardianFormController.gender = Gender.unspecified;
-    controller = widget.student == null ? StudentFormController() : StudentFormController.fromStudent(widget.student!);
+    controller = widget.student == null
+        ? StudentFormController()
+        : StudentFormController.fromStudent(widget.student!);
     duplicateIcNumber = false;
 
     if (widget.student != null) {
       if (widget.student?.father != null) {
-        fatherFormController = ParentFormController.fromParent(widget.student!.father!);
+        fatherFormController =
+            ParentFormController.fromParent(widget.student!.father!);
       }
       if (widget.student?.mother != null) {
-        motherFormController = ParentFormController.fromParent(widget.student!.mother!);
+        motherFormController =
+            ParentFormController.fromParent(widget.student!.mother!);
       }
       if (widget.student?.guardian != null) {
-        guardianFormController = ParentFormController.fromParent(widget.student!.guardian!);
+        guardianFormController =
+            ParentFormController.fromParent(widget.student!.guardian!);
       }
     }
 
@@ -107,11 +114,15 @@ class _StudentFormState extends State<StudentForm> {
             if (widget.student != null)
               IconButton(
                 onPressed: () async {
-                  var callable = functions.httpsCallable('getTransaction', options: HttpsCallableOptions(timeout: const Duration(seconds: 5)));
+                  var callable = functions.httpsCallable('getTransaction',
+                      options: HttpsCallableOptions(
+                          timeout: const Duration(seconds: 5)));
 
                   var data = {
                     'emp_code': 1,
-                    'start_time': DateTime(2022, DateTime.august, 01).toString().substring(0, 19),
+                    'start_time': DateTime(2022, DateTime.august, 01)
+                        .toString()
+                        .substring(0, 19),
                     'end_time': DateTime.now().toString().substring(0, 19),
                     'token': AttendanceController.token
                   };
@@ -128,15 +139,19 @@ class _StudentFormState extends State<StudentForm> {
         ),
         body: SingleChildScrollView(
           child: Padding(
-            padding: isDesktop(context) && isTablet(context) ? EdgeInsets.only(left: getWidth(context) * 0.25) : const EdgeInsets.all(8),
+            padding: isDesktop(context) && isTablet(context)
+                ? EdgeInsets.only(left: getWidth(context) * 0.25)
+                : const EdgeInsets.all(8),
             child: Form(
               key: _formKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
-                    padding:
-                        isMobile(context) ? EdgeInsets.symmetric(horizontal: getWidth(context) * 0.25) : EdgeInsets.all(getWidth(context) * 0.05),
+                    padding: isMobile(context)
+                        ? EdgeInsets.symmetric(
+                            horizontal: getWidth(context) * 0.25)
+                        : EdgeInsets.all(getWidth(context) * 0.05),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -163,7 +178,9 @@ class _StudentFormState extends State<StudentForm> {
                     padding: const EdgeInsets.all(16.0),
                     child: Text(
                       'Personal Details',
-                      style: getText(context).headline6!.apply(color: getColor(context).primary),
+                      style: getText(context)
+                          .headline6!
+                          .apply(color: getColor(context).primary),
                     ),
                   ),
                   Center(
@@ -171,7 +188,9 @@ class _StudentFormState extends State<StudentForm> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         SizedBox(
-                          width: isMobile(context) ? getWidth(context) * 0.80 : getWidth(context) * 0.20,
+                          width: isMobile(context)
+                              ? getWidth(context) * 0.80
+                              : getWidth(context) * 0.20,
                           child: CustomTextField(
                             hintText: 'Student Name',
                             validator: requiredAlphabetsonly,
@@ -180,7 +199,9 @@ class _StudentFormState extends State<StudentForm> {
                           ),
                         ),
                         SizedBox(
-                          width: isMobile(context) ? getWidth(context) * 0.80 : getWidth(context) * 0.20,
+                          width: isMobile(context)
+                              ? getWidth(context) * 0.80
+                              : getWidth(context) * 0.20,
                           child: CustomDropDown<Gender>(
                               onChanged: (Gender? text) {
                                 setState(() {
@@ -189,14 +210,21 @@ class _StudentFormState extends State<StudentForm> {
                               },
                               labelText: 'Gender',
                               items: const [
-                                DropdownMenuItem(child: Text('Male'), value: Gender.male),
-                                DropdownMenuItem(child: Text('Female'), value: Gender.female),
-                                DropdownMenuItem(child: Text('Unspecified'), value: Gender.unspecified),
+                                DropdownMenuItem(
+                                    child: Text('Male'), value: Gender.male),
+                                DropdownMenuItem(
+                                    child: Text('Female'),
+                                    value: Gender.female),
+                                DropdownMenuItem(
+                                    child: Text('Unspecified'),
+                                    value: Gender.unspecified),
                               ],
                               selectedValue: controller.gender),
                         ),
                         SizedBox(
-                          width: isMobile(context) ? getWidth(context) * 0.80 : getWidth(context) * 0.20,
+                          width: isMobile(context)
+                              ? getWidth(context) * 0.80
+                              : getWidth(context) * 0.20,
                           child: CustomDropDown<String?>(
                             labelText: 'Class',
                             items: controller.classItems,
@@ -216,7 +244,9 @@ class _StudentFormState extends State<StudentForm> {
                           ),
                         ),
                         SizedBox(
-                          width: isMobile(context) ? getWidth(context) * 0.80 : getWidth(context) * 0.20,
+                          width: isMobile(context)
+                              ? getWidth(context) * 0.80
+                              : getWidth(context) * 0.20,
                           child: CustomDropDown<String?>(
                             labelText: 'Section',
                             items: controller.sectionItems,
@@ -242,7 +272,9 @@ class _StudentFormState extends State<StudentForm> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         SizedBox(
-                          width: isMobile(context) ? getWidth(context) * 0.80 : getWidth(context) * 0.20,
+                          width: isMobile(context)
+                              ? getWidth(context) * 0.80
+                              : getWidth(context) * 0.20,
                           child: CustomTextField(
                             // enabled: widget.student == null,
                             validator: (val) {
@@ -269,15 +301,20 @@ class _StudentFormState extends State<StudentForm> {
                     onChanged: (val) {
                       if (val == true) {
                         setState(() {
-                          motherFormController.addressLine1.text = fatherFormController.addressLine1.text;
-                          motherFormController.addressLine2.text = fatherFormController.addressLine2.text;
-                          motherFormController.state = fatherFormController.state;
+                          motherFormController.addressLine1.text =
+                              fatherFormController.addressLine1.text;
+                          motherFormController.addressLine2.text =
+                              fatherFormController.addressLine2.text;
+                          motherFormController.state =
+                              fatherFormController.state;
                           motherFormController.city = fatherFormController.city;
+                          motherFormController?.isActive = true;
                         });
                       }
                     },
                   ),
-                  ParentForm(controller: guardianFormController, label: 'Guardian'),
+                  ParentForm(
+                      controller: guardianFormController, label: 'Guardian'),
                   Center(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
@@ -294,39 +331,69 @@ class _StudentFormState extends State<StudentForm> {
                               Parent? guardian;
                               Future<Result> future;
                               try {
-                                student = controller.student;
+                                student = controller.student; 
                                 father = fatherFormController.parent;
                                 mother = motherFormController.parent;
                                 guardian = guardianFormController.parent;
+                                father!.isActive = true;
+                                // mother!.isActive = true;
+                                // guardian!.isActive = true;
 
                                 if (formMode == FormMode.add) {
                                   if (controller.fileData != null) {
-                                    future =
-                                        uploadImage(controller.fileData!, controller.icNumber.text.toUpperCase().removeAllWhitespace).then((value) {
+                                    future = uploadImage(
+                                            controller.fileData!,
+                                            controller.icNumber.text
+                                                .toUpperCase()
+                                                .removeAllWhitespace)
+                                        .then((value) {
                                       student!.imageUrl = value;
-                                      var studentController = StudentController(student);
-                                      return studentController.add(father: father, mother: mother, guardian: guardian);
-                                    }).onError((error, stackTrace) => Result.error(error.toString()));
+                                      var studentController =
+                                          StudentController(student);
+                                      return studentController.add(
+                                          father: father,
+                                          mother: mother,
+                                          guardian: guardian);
+                                    }).onError((error, stackTrace) =>
+                                            Result.error(error.toString()));
                                   } else {
-                                    var studentController = StudentController(student);
-                                    future = studentController.add(father: father, mother: mother, guardian: guardian);
+                                    var studentController =
+                                        StudentController(student);
+                                    future = studentController.add(
+                                        father: father,
+                                        mother: mother,
+                                        guardian: guardian);
                                   }
                                 } else {
                                   if (controller.fileData != null) {
-                                    future =
-                                        uploadImage(controller.fileData!, controller.icNumber.text.toUpperCase().removeAllWhitespace).then((value) {
+                                    future = uploadImage(
+                                            controller.fileData!,
+                                            controller.icNumber.text
+                                                .toUpperCase()
+                                                .removeAllWhitespace)
+                                        .then((value) {
                                       student!.imageUrl = value;
-                                      var studentController = StudentController(student);
-                                      return studentController.change(father: father, mother: mother, guardian: guardian);
-                                    }).onError((error, stackTrace) => Result.error(error.toString()));
+                                      var studentController =
+                                          StudentController(student);
+                                      return studentController.change(
+                                          father: father,
+                                          mother: mother,
+                                          guardian: guardian);
+                                    }).onError((error, stackTrace) =>
+                                            Result.error(error.toString()));
                                   } else {
-                                    var studentController = StudentController(student);
-                                    future = studentController.change(father: father, mother: mother, guardian: guardian);
+                                    var studentController =
+                                        StudentController(student);
+                                    future = studentController.change(
+                                        father: father,
+                                        mother: mother,
+                                        guardian: guardian);
                                   }
                                 }
                               } catch (e) {
                                 // print(e.toString());
-                                future = Result.error("Unknown error") as Future<Result>;
+                                future = Result.error("Unknown error")
+                                    as Future<Result>;
                               }
 
                               showFutureCustomDialog(
@@ -342,7 +409,8 @@ class _StudentFormState extends State<StudentForm> {
                             }
                           },
                           child: const Padding(
-                            padding: EdgeInsets.symmetric(vertical: 30.0, horizontal: 50),
+                            padding: EdgeInsets.symmetric(
+                                vertical: 30.0, horizontal: 50),
                             child: Text("Submit"),
                           )),
                     ),
@@ -403,7 +471,9 @@ class CustomTextForm extends StatelessWidget {
           TextField(
             decoration: InputDecoration(
               alignLabelWithHint: true,
-              focusedBorder: OutlineInputBorder(borderSide: BorderSide(width: 2, color: getColor(context).primary)),
+              focusedBorder: OutlineInputBorder(
+                  borderSide:
+                      BorderSide(width: 2, color: getColor(context).primary)),
               border: const OutlineInputBorder(
                 borderRadius: BorderRadius.all(
                   Radius.circular(10.0),

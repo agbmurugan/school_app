@@ -28,54 +28,85 @@ class BioSource extends DataTableSource {
     if (index >= entities.length) return null;
     Bio entity = entities[index];
 
+    // Debugging statement
+    print('Entity: ${entity.name}, isActive: ${entity.isActive}');
+
     final CRUD object = getEntity(entity, index);
     int sNo = index + 1;
     return DataRow.byIndex(
-        index: index,
-        color: MaterialStateProperty.all((sNo % 2 == 0) ? Colors.white : Color.fromARGB(255, 233, 232, 232)),
-        cells: [
-          DataCell(Text(sNo.toString())),
-          DataCell((entity.imageUrl ?? '').isEmpty
-              ? const CircleAvatar(
-                  child: Text("IMG"),
-                )
-              : CircleAvatar(
-                  backgroundImage: NetworkImage(entity.imageUrl!),
-                )),
-          DataCell(Text(entity.name)),
-          DataCell(Text(entity.icNumber)),
-          DataCell(Text(entity.email ?? '')),
-          DataCell(Text(entity.gender.name.toString().toUpperCase())),
-          DataCell(Text((entity.addressLine1 ?? '') + " ," + (entity.addressLine2 ?? '') + " ," + (entity.city ?? ''))),
-          DataCell(IconButton(
+      index: index,
+      color: MaterialStateProperty.all((sNo % 2 == 0)
+          ? Colors.white
+          : Color.fromARGB(255, 233, 232, 232)),
+      cells: [
+        DataCell(Text(sNo.toString())),
+        DataCell((entity.imageUrl ?? '').isEmpty
+            ? const CircleAvatar(
+                child: Text("IMG"),
+              )
+            : CircleAvatar(
+                backgroundImage: NetworkImage(entity.imageUrl!),
+              )),
+        DataCell(Text(entity.name)),
+        DataCell(Text(entity.icNumber)),
+        DataCell(Text(entity.email ?? '')),
+        DataCell(Text(entity.gender.name.toString().toUpperCase())),
+        DataCell(Text((entity.addressLine1 ?? '') +
+            " ," +
+            (entity.addressLine2 ?? '') +
+            " ," +
+            (entity.city ?? ''))),
+        DataCell(
+          Container(
+            padding: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+            decoration: BoxDecoration(
+              color: entity.isActive ? Colors.green : Colors.grey,
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: Text(
+              entity.isActive ? 'Active' : 'Inactive',
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ),
+        DataCell(
+          IconButton(
             icon: const Icon(Icons.delete),
             onPressed: () {
               object.delete();
             },
-          )),
-          DataCell(IconButton(
-              onPressed: () {
-                switch (entity.entityType) {
-                  case EntityType.student:
-                    Student student = entities[index];
-                    Get.to(() => StudentForm(student: student));
-                    break;
-                  case EntityType.teacher:
-                    Teacher teacher = entities[index];
-                    Get.to(() => TeacherForm(teacher: teacher));
-                    break;
-                  case EntityType.parent:
-                    Parent parent = entities[index];
-                    Get.to(() => ParentForm(parent: parent));
-                    break;
-                  case EntityType.admin:
-                    Admin admin = entities[index];
-                    Get.to(() => AdminForm(admin: admin));
-                    break;
-                }
-              },
-              icon: const Icon(Icons.edit))),
-        ]);
+          ),
+        ),
+        DataCell(
+          IconButton(
+            onPressed: () {
+              switch (entity.entityType) {
+                case EntityType.student:
+                  Student student = entities[index];
+                  Get.to(() => StudentForm(student: student));
+                  break;
+                case EntityType.teacher:
+                  Teacher teacher = entities[index];
+                  Get.to(() => TeacherForm(teacher: teacher));
+                  break;
+                case EntityType.parent:
+                  Parent parent = entities[index];
+                  Get.to(() => ParentForm(parent: parent));
+                  break;
+                case EntityType.admin:
+                  Admin admin = entities[index];
+                  Get.to(() => AdminForm(admin: admin));
+                  break;
+              }
+            },
+            icon: const Icon(Icons.edit),
+          ),
+        ),
+      ],
+    );
   }
 
   @override
@@ -90,11 +121,17 @@ class BioSource extends DataTableSource {
   getEntity(Bio entity, int index) {
     switch (entity.entityType) {
       case EntityType.parent:
-        return ParentController.parentsList.firstWhere((p0) => p0.icNumber == entity.icNumber).controller;
+        return ParentController.parentsList
+            .firstWhere((p0) => p0.icNumber == entity.icNumber)
+            .controller;
       case EntityType.teacher:
-        return TeacherController.teacherList.firstWhere((p0) => p0.icNumber == entity.icNumber).controller;
+        return TeacherController.teacherList
+            .firstWhere((p0) => p0.icNumber == entity.icNumber)
+            .controller;
       case EntityType.student:
-        return StudentController.studentList.firstWhere((p0) => p0.icNumber == entity.icNumber).controller;
+        return StudentController.studentList
+            .firstWhere((p0) => p0.icNumber == entity.icNumber)
+            .controller;
       case EntityType.admin:
         return AdminController((entities[index] as Admin));
       default:
@@ -110,6 +147,7 @@ class BioSource extends DataTableSource {
       const DataColumn(label: Text('EMAIL')),
       const DataColumn(label: Text('GENDER')),
       const DataColumn(label: Text('ADDRESS')),
+      const DataColumn(label: Text('STATUS')),
       const DataColumn(label: Text('DELETE')),
       const DataColumn(label: Text('EDIT')),
     ];

@@ -24,6 +24,7 @@ class BioFormController {
   // final imageUrl = TextEditingController();
   Gender gender = Gender.unspecified;
   String? image;
+  bool?isActive;
 
   Provide show = Provide.logo;
   ImageProvider getAvatar() {

@@ -6,22 +6,25 @@ import '../constants/constant.dart';
 import 'parent.dart';
 
 class Bio {
-  Bio(
-      {required this.name,
-      required this.entityType,
-      required this.icNumber,
-      required this.email,
-      required this.gender,
-      this.address,
-      this.lastName,
-      this.imageUrl,
-      this.addressLine1,
-      this.addressLine2,
-      this.city,
-      this.primaryPhone,
-      this.secondaryPhone,
-      this.state,
-      required this.docId, this.nonHyphenIcNumber});
+  Bio({
+    required this.name,
+    required this.entityType,
+    required this.icNumber,
+    required this.email,
+    required this.gender,
+    this.address,
+    this.lastName,
+    this.imageUrl,
+    this.addressLine1,
+    this.addressLine2,
+    this.city,
+    this.primaryPhone,
+    this.secondaryPhone,
+    this.state,
+    required this.docId,
+    this.nonHyphenIcNumber,
+    bool? isActive,
+  }) : isActive = isActive ?? false; // Ensure default value here
 
   String? docId;
   String name;
@@ -39,6 +42,7 @@ class Bio {
   String? secondaryPhone;
   String? imageUrl;
   Gender gender;
+  bool isActive; // Changed to non-nullable
 
   @override
   // ignore: hash_and_equals
@@ -46,7 +50,7 @@ class Bio {
     return icNumber == (other as Bio).icNumber;
   }
 
-  factory Bio.fromBioJson(json) => Bio(
+  factory Bio.fromBioJson(Map<String, dynamic> json) => Bio(
         docId: json["docId"],
         name: json["name"] ?? '',
         entityType: EntityType.values.elementAt(json["entityType"]),
@@ -61,7 +65,9 @@ class Bio {
         lastName: json["lastName"],
         primaryPhone: json["primaryPhone"],
         secondaryPhone: json["secondaryPhone"],
-        state: json["state"], nonHyphenIcNumber: json["nonHyphenIcNumber"],
+        state: json["state"],
+        nonHyphenIcNumber: json["nonHyphenIcNumber"],
+        isActive: json["isActive"] ?? false, // Ensure default value here
       );
 
   List<String> get search {
@@ -99,19 +105,17 @@ class Bio {
         "imageUrl": imageUrl,
         "gender": gender.index,
         "search": search,
+        "isActive": isActive,
       };
 
   static String getUrl(EntityType type) {
     switch (type) {
       case EntityType.student:
         return 'https://cdn-icons-png.flaticon.com/512/3829/3829933.png';
-
       case EntityType.teacher:
         return 'https://cdn-icons-png.flaticon.com/512/4696/4696727.png';
-
       case EntityType.parent:
         return 'https://cdn-icons-png.flaticon.com/512/780/780270.png';
-
       case EntityType.admin:
         return 'https://cdn-icons-png.flaticon.com/512/2345/2345338.png';
     }
