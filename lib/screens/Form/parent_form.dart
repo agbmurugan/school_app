@@ -313,7 +313,7 @@ class _ParentFormState extends State<ParentForm> {
                                           });
                                         },
                                       ),
-                                      const Text('isActive'),
+                                      const Text('Is Active'),
                                     ],
                                   ),
                                 ),

@@ -64,7 +64,7 @@ class BioSource extends DataTableSource {
               borderRadius: BorderRadius.circular(16),
             ),
             child: Text(
-              entity.isActive ? 'Active' : 'Inactive',
+              entity.isActive ? 'Active' : 'In Active',
               style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
