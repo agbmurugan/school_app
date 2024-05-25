@@ -235,6 +235,7 @@ class _ParentFormState extends State<ParentForm> {
                                     validator: requiredValidator,
                                     controller: controller.email,
                                     labelText: "Email",
+                                    enabled: false,
                                   ),
                                 ),
                                 SizedBox(

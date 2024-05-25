@@ -19,6 +19,7 @@ class StudentFormController with BioFormController {
 
   String? classField;
   String? sectionField;
+  bool? isActive;
   final List<TextEditingController> siblings = [TextEditingController()];
 
   String? docId;
@@ -113,6 +114,7 @@ class StudentFormController with BioFormController {
         guardian: guardian,
         mother: mother,
         state: state,
+        isActive: isActive
       );
 
   factory StudentFormController.fromStudent(Student student) {
@@ -134,6 +136,7 @@ class StudentFormController with BioFormController {
     controller.gender = student.gender;
     controller.primaryPhone.text = student.primaryPhone ?? '';
     controller.secondaryPhone.text = student.secondaryPhone ?? '';
+    controller.isActive = student.isActive ?? false;
     controller.siblings.clear();
 
     return controller;

@@ -100,6 +100,7 @@ class Student extends Bio {
         //-------------------------------------------
         studentClass: json["class"],
         section: json["section"],
+        isActive: json["isActive"],
         empId: json["empId"]);
   }
 
@@ -131,5 +132,6 @@ class Student extends Bio {
         "section": section,
         //------------
         "parents": parents,
+        "isActive":isActive ?? false
       };
 }

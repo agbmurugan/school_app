@@ -66,6 +66,22 @@ class StudentSource extends DataTableSource {
               ),
             ),
           )),
+          DataCell(
+          Container(
+            padding: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+            decoration: BoxDecoration(
+              color: entity.isActive ? Colors.green : Colors.grey,
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: Text(
+              entity.isActive ? 'Active' : 'In Active',
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ),
           DataCell(IconButton(
             icon: const Icon(Icons.delete),
             onPressed: () {
@@ -136,6 +152,7 @@ class StudentSource extends DataTableSource {
       const DataColumn(
         label: Center(child: Text('ATTENDANCE REPORT')),
       ),
+      const DataColumn(label: Text('STATUS')),
       const DataColumn(label: Text('DELETE')),
       const DataColumn(label: Text('EDIT')),
     ];
@@ -179,6 +196,7 @@ class AttendanceLogSource extends DataTableSource {
       DataCell(Text(TimeOfDay.fromDateTime(log.punchTime).format(context))),
       DataCell(Text(log.punchStateDisplay.toString())),
       DataCell(Text(status(log.punchTime) ? "ON-TIME" : "LATE")),
+      
     ];
     if (area == 'CAFETERIA') {
       cells.removeLast();

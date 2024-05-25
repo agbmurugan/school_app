@@ -41,6 +41,10 @@ class _StudentFormState extends State<StudentForm> {
   ParentFormController fatherFormController = ParentFormController();
   ParentFormController motherFormController = ParentFormController();
   ParentFormController guardianFormController = ParentFormController();
+  bool isParentDetailValid(ParentFormController parentFormController) {
+    // Checks if the name field is not empty; add more checks as needed
+    return parentFormController.name.text.trim().isNotEmpty;
+  }
 
   bool duplicateIcNumber = false;
 
@@ -291,6 +295,26 @@ class _StudentFormState extends State<StudentForm> {
                             hintText: 'Enter IC Number',
                           ),
                         ),
+                        SizedBox(
+                          width: isMobile(context)
+                              ? getWidth(context) * 0.80
+                              : getWidth(context) * 0.20,
+                          child: Row(
+                            children: [
+                              Checkbox(
+                                value: controller.isActive ??
+                                    false, // Ensuring the value is not null
+                                onChanged: (bool? newValue) {
+                                  setState(() {
+                                    controller.isActive = newValue ??
+                                        false; // Handle null just in case
+                                  });
+                                },
+                              ),
+                              const Text('Is Active'),
+                            ],
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -323,18 +347,44 @@ class _StudentFormState extends State<StudentForm> {
                       child: ElevatedButton(
                           onPressed: () async {
                             await validateIcNumber();
-
+                            bool atLeastOneParentIsValid =
+                                isParentDetailValid(fatherFormController) ||
+                                    isParentDetailValid(motherFormController) ||
+                                    isParentDetailValid(guardianFormController);
+                             
                             if (_formKey.currentState!.validate()) {
+                              if (!atLeastOneParentIsValid) {
+                              // Handle the case where no parent details are valid
+                              showDialog(
+                                context: context,
+                                builder: (ctx) => AlertDialog(
+                                  title: Text("Validation Error"),
+                                  content: Text(
+                                      "At least one of Father, Mother, or Guardian details must be filled."),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.of(ctx)
+                                            .pop(); // Close the dialog
+                                      },
+                                      child: Text("OK"),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }
+                            else{
                               Student? student;
                               Parent? father;
                               Parent? mother;
                               Parent? guardian;
                               Future<Result> future;
                               try {
-                                student = controller.student; 
+                                student = controller.student;
                                 father = fatherFormController.parent;
                                 mother = motherFormController.parent;
                                 guardian = guardianFormController.parent;
+
                                 father!.isActive = true;
                                 // mother!.isActive = true;
                                 // guardian!.isActive = true;
@@ -384,6 +434,11 @@ class _StudentFormState extends State<StudentForm> {
                                   } else {
                                     var studentController =
                                         StudentController(student);
+                                    await firestore
+                                        .collection('students')
+                                        .doc(student.docId)
+                                        .update(
+                                            {'isActive': controller.isActive});
                                     future = studentController.change(
                                         father: father,
                                         mother: mother,
@@ -394,6 +449,7 @@ class _StudentFormState extends State<StudentForm> {
                                 // print(e.toString());
                                 future = Result.error("Unknown error")
                                     as Future<Result>;
+                              
                               }
 
                               showFutureCustomDialog(
@@ -406,6 +462,7 @@ class _StudentFormState extends State<StudentForm> {
                                       formMode = FormMode.update;
                                     }
                                   });
+                            }
                             }
                           },
                           child: const Padding(

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:school_app/constants/constant.dart';
@@ -65,6 +67,7 @@ class ParentController extends GetxController implements CRUD {
   Future<Result> change() async {
     List<Future> futures = [];
     for (var element in parent.children) {
+          print("hi i am change function $element");
       futures.add(firestore.collection('students').where('icNumber', isEqualTo: element).get().then((value) {
         var student = Student.fromJson(value.docs.first.data(), value.docs.first.id);
         if (student.father?.icNumber == parent.icNumber) {

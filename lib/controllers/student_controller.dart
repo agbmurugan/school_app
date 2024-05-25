@@ -195,12 +195,19 @@ class StudentController extends GetxController implements CRUD {
         firestore.collection('parents').doc(element.docId).update({'children': element.children});
       });
     });
-    return firestore
-        .collection('students')
-        .doc(student.docId)
-        .delete()
-        .then((value) => Result.success("Student Updated successfully"))
-        .onError((error, stackTrace) => Result.error(error.toString()));
+    // return firestore
+    //     .collection('students')
+    //     .doc(student.docId)
+    //     .delete()
+    //     .then((value) => Result.success("Student Updated successfully"))
+    //     .onError((error, stackTrace) => Result.error(error.toString()));
+
+    await firestore.collection('students').doc(student.docId).update({
+      'isActive': false
+    });
+
+    // Return success result
+    return Result.success("Student updated successfully");
   }
 
   Stream<Student> get stream => firestore
